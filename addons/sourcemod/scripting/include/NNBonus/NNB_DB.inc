@@ -8,7 +8,7 @@ stock int Abs(int x){
 
 public void PlayerGiveBonusSQL(Database hDatabase, DBResultSet results, const char[] sError, any client){
     if(!correctPlayer(client)) return;
-    char sClientName[32], sClientAuth[64];
+    char sClientAuth[64], szQuery[256], sClientName[32];
     GetClientName(client, sClientName, sizeof(sClientName));
     GetClientAuthId(client, AuthId_Steam2, sClientAuth, sizeof(sClientAuth));
 
@@ -20,24 +20,26 @@ public void PlayerGiveBonusSQL(Database hDatabase, DBResultSet results, const ch
             CGOPrintToChat(client, "%s %t", PREFIX, "BONUS_COOLDOWN", Abs((left - iBonusInterval) / 3600)); 
             return;
         }
-        NCRPG_GiveCredits(client, iGiveCredits);
-        CGOPrintToChat(client, "%s %t", PREFIX, "BONUS_GIVE_SUCCESS"); 
-        CGOPrintToChatAll("%s%t", PREFIX, "BONUS_GIVEN", sClientName, iGiveCredits);
+
+        FormatEx(szQuery, sizeof(szQuery), "UPDATE `nn_bonus` SET `lastuse` = '%i' WHERE `steamid` = '%s'", GetTime(), sClientAuth);
+        hDatabase.Query(UpdateLasttimeSQL, szQuery, client);
+        
     }else{
-        char szQuery[256];
         int lastuse = GetTime();
         FormatEx(szQuery, sizeof(szQuery), "INSERT INTO `nn_bonus` (steamid, name, lastuse) VALUES ('%s', '%s', '%i')", sClientAuth, sClientName, lastuse);
-        hDatabase.Query(PlayerInsertFirstTimeSQL, szQuery, client);
-        CGOPrintToChat(client, "%s %t", PREFIX, "BONUS_GIVE_SUCCESS"); 
-        CGOPrintToChatAll("%s%t", PREFIX, "BONUS_GIVEN", sClientName, iGiveCredits);
+        hDatabase.Query(UpdateLasttimeSQL, szQuery, client);
     }
 }
-public void PlayerInsertFirstTimeSQL(Database hDB, DBResultSet results, const char[] sError, any client){
+public void UpdateLasttimeSQL(Database hDB, DBResultSet hRes, const char[] sError, any client){
+    char sClientName[32];
+    GetClientName(client, sClientName, sizeof(sClientName));
     if(sError[0]){
-        LogMessage("Fail to insert player info: %s", sError);
+        LogMessage("Fail to update last time for player: %s", sError);
         return;
     }
     NCRPG_GiveCredits(client, iGiveCredits);
+    CGOPrintToChat(client, "%s %t", PREFIX, "BONUS_GIVE_SUCCESS"); 
+    CGOPrintToChatAll("%s %t", PREFIX, "BONUS_GIVEN", sClientName, iGiveCredits);        
 }
 public void DBCallback(Database hDB, const char[] szError, any data){
     if(hDB == null || szError[0]){
