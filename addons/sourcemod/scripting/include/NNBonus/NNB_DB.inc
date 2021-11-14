@@ -22,15 +22,15 @@ public void PlayerGiveBonusSQL(Database hDatabase, DBResultSet results, const ch
         }
 
         FormatEx(szQuery, sizeof(szQuery), "UPDATE `nn_bonus` SET `lastuse` = '%i' WHERE `steamid` = '%s'", GetTime(), sClientAuth);
-        hDatabase.Query(UpdateLasttimeSQL, szQuery, client);
+        hDatabase.Query(GiveCreaditsAndNotifySQL, szQuery, client);
         
     }else{
         int lastuse = GetTime();
         FormatEx(szQuery, sizeof(szQuery), "INSERT INTO `nn_bonus` (steamid, name, lastuse) VALUES ('%s', '%s', '%i')", sClientAuth, sClientName, lastuse);
-        hDatabase.Query(UpdateLasttimeSQL, szQuery, client);
+        hDatabase.Query(GiveCreaditsAndNotifySQL, szQuery, client);
     }
 }
-public void UpdateLasttimeSQL(Database hDB, DBResultSet hRes, const char[] sError, any client){
+public void GiveCreaditsAndNotifySQL(Database hDB, DBResultSet hRes, const char[] sError, any client){
     char sClientName[32];
     GetClientName(client, sClientName, sizeof(sClientName));
     if(sError[0]){
