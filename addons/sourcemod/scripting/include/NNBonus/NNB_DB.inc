@@ -26,6 +26,7 @@ public void PlayerGiveBonusSQL(Database hDatabase, DBResultSet results, const ch
         
     }else{
         int lastuse = GetTime();
+        ReplaceString(sClientName, sizeof(sClientName), "'", ""); // security from SQL inj
         FormatEx(szQuery, sizeof(szQuery), "INSERT INTO `nn_bonus` (steamid, name, lastuse) VALUES ('%s', '%s', '%i')", sClientAuth, sClientName, lastuse);
         hDatabase.Query(GiveCreaditsAndNotifySQL, szQuery, client);
     }
@@ -51,7 +52,7 @@ public void DBCallback(Database hDB, const char[] szError, any data){
 }
 public void CreateTables(){
     hDatabase.SetCharset("utf8");
-    hDatabase.Query(DB_CreateTables_CB, "CREATE TABLE IF NOT EXISTS `nn_bonus`(`steamid` VARCHAR(32) NOT NULL,`name`    VARCHAR(32) NOT NULL,`lastuse` INT(32) NOT NULL);");
+    hDatabase.Query(DB_CreateTables_CB, "CREATE TABLE IF NOT EXISTS `nn_bonus`(`steamid` VARCHAR(32) NOT NULL,`name` VARCHAR(32) NOT NULL,`lastuse` INT(32) NOT NULL);");
 }
 public void DB_CreateTables_CB(Database hDB, DBResultSet results, const char[] sError, any iUserID){
     if(sError[0]){
