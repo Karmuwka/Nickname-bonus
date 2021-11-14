@@ -1,0 +1,32 @@
+"Phrases"
+{
+	"BONUS_NOTICE_MESSAGE"
+	{
+		"#format" "{1:s},{2:i}"
+		"ru"	"Добавьте к нику {RED}{1}{DEFAULT} и напиши {PURPLE}!bonus{DEFAULT} чтобы получить {RED}{2}{DEFAULT} кредитов!"
+		"en"	"Add to your nicknames {RED}{1}{DEFAULT} and use {PURPLE}!bonus{DEFAULT} to get {RED}{2}{DEFAULT} creadits!"
+	}
+	"BONUS_NO_PREFIX"
+	{
+		"#format" "{1:s}"
+		"ru"	"У вас отсутствует {RED}{1}{DEFAULT} префикс!"
+		"en"	"U dont have a {RED}{1}{DEFAULT} prefix!"
+	}
+	"BONUS_GIVE_SUCCESS"
+	{
+		"ru"	"Поздравляем! Вы получили бонус!"
+		"en"	"Congratulations! you got a bonus!
+	}
+	"BONUS_GIVEN"
+	{
+		"#format" "{1:s}, {2:i}"
+		"ru"	"Игрок {1} получил бонус {2} кредитов! Хочешь так же? Напиши !bonus"
+		"en"	"Player {1} got a {2} creadit bonus! Want too? Use !bonus"
+	}
+	"BONUS_COOLDOWN"
+	{
+		"#format" "{1:i}"
+		"ru"	"Бонус еще недоступен. Подождите {1} часов!"
+		"en"	"Bonus is not aviable for {1} hours!"
+	}
+}
